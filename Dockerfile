@@ -2,7 +2,7 @@
 FROM python:3.7.5-slim-buster
 MAINTAINER Nick Janetakis <nick.janetakis@gmail.com>
 
-ENV INSTALL_PATH /
+ENV INSTALL_PATH /snakeeyes
 RUN mkdir -p $INSTALL_PATH
 
 WORKDIR $INSTALL_PATH

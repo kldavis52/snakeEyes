@@ -8,7 +8,7 @@ def create_app():
     Return: Flask app
     """
 
-    app = Flask(__name__)
+    app = Flask(__name__, instance_relative_config=True)
 
     app.config.from_object("config.settings")
     app.config.from_pyfile("settings.py", silent=True)
@@ -20,7 +20,11 @@ def create_app():
 
         Return: Flask response
         """
-        return "Hello World!"
+        return "<h1>Hello Puppy!</h1>"
+
+    @app.route("/info")
+    def info():
+        return "<h1>Puppies are CUTE</h1>"
 
     return app
 
