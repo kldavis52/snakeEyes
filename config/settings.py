@@ -1,2 +1,2 @@
+ENV = "development"
 DEBUG = True
-HELLO = "Hello World!!"

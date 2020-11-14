@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 
 
 def create_app():
@@ -20,11 +20,17 @@ def create_app():
 
         Return: Flask response
         """
-        return "<h1>Hello Puppy!</h1>"
+        name = "Kyle"
+        letters = list(name)
+        return render_template("base.html", name=name, letters=letters)
 
     @app.route("/info")
     def info():
         return "<h1>Puppies are CUTE</h1>"
+
+    @app.route("/puppy/<name>")
+    def puppy(name):
+        return f"100th letter: {name}"
 
     return app
 
