@@ -1,4 +1,6 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
 
 
 def create_app():
@@ -10,27 +12,43 @@ def create_app():
 
     app = Flask(__name__, instance_relative_config=True)
 
+    app.config["SECRET_KEY"] = "mysecretkey"
     app.config.from_object("config.settings")
     app.config.from_pyfile("settings.py", silent=True)
 
-    @app.route("/")
-    def index():
+    class InfoForm(FlaskForm):
+        breed = StringField(label="What Breed are you?")
+        submit = SubmitField(label="Submit")
+
+    @app.route("/", methods=["Get", "POST"])
+    def home():
         """
         Render a Hello World response
 
         Return: Flask response
         """
-        name = "Kyle"
-        letters = list(name)
-        return render_template("base.html", name=name, letters=letters)
+        breed = False
 
-    @app.route("/info")
-    def info():
-        return "<h1>Puppies are CUTE</h1>"
+        form = InfoForm()
+        if form.validate_on_submit():
+            breed = form.breed.data
+            form.breed.data = ""
 
-    @app.route("/puppy/<name>")
-    def puppy(name):
-        return f"100th letter: {name}"
+        return render_template("snakeeyes/home.html")
+
+    @app.route("/signup_form")
+    def signup_form():
+        return render_template("snakeeyes/signup.html")
+
+    @app.route("/thankyou")
+    def thankyou():
+        first = request.args.get("first")
+        last = request.args.get("last")
+        return render_template("snakeeyes/thankyou.html", first=first, last=last)
+
+    @app.errorhandler(404)
+    def page_not_found(e):
+        return render_template("snakeeyes/404.html"), 404
 
     return app
 
